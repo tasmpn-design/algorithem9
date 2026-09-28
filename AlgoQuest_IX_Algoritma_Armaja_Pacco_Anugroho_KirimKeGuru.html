@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlgoQuest IX — Belajar Algoritma</title>
+<style>
+:root{
+  --bg:#f5f7ff;--card:#fff;--text:#172033;--muted:#667085;--primary:#635bff;
+  --secondary:#12b886;--accent:#ffb703;--danger:#ef476f;--line:#e6e8f0;
+  --shadow:0 12px 35px rgba(31,41,55,.10);--radius:20px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}
+.sidebar{width:270px;background:#11152b;color:white;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:20;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 10px 22px}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c73ff,#12b886);display:grid;place-items:center;font-size:23px}
+.brand b{display:block}.brand small{color:#aeb5d2}
+.nav{display:grid;gap:6px}.nav button{width:100%;text-align:left;background:transparent;color:#cbd0e5;padding:12px;border-radius:12px;display:flex;gap:12px;align-items:center}
+.nav button:hover,.nav button.active{background:#242947;color:#fff}.nav .ico{width:24px;text-align:center}
+.side-progress{margin:22px 8px;padding:15px;background:#1c2140;border-radius:16px}
+.progressbar{height:8px;background:#343957;border-radius:9px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,#7c73ff,#12b886);width:0}
+.main{margin-left:270px;width:calc(100% - 270px);padding:24px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:18px}
+.hamb{display:none}.pill{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted);font-size:13px}
+.page{display:none}.page.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{background:linear-gradient(135deg,#161b38,#2b2a72 55%,#12b886);color:#fff;border-radius:28px;padding:34px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"{ }";position:absolute;right:35px;bottom:-25px;font-size:130px;font-weight:900;color:rgba(255,255,255,.08)}
+.hero h1{font-size:clamp(28px,4vw,50px);line-height:1.05;margin:8px 0 12px;max-width:750px}.hero p{max-width:720px;color:#e7e9ff}
+.btn{padding:11px 16px;border-radius:12px;font-weight:700;transition:.2s;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn:hover{transform:translateY(-1px)}.primary{background:var(--primary);color:white}.green{background:var(--secondary);color:white}.light{background:#fff;color:var(--text);border:1px solid var(--line)}.warn{background:#fff0c2;color:#6c5000}.danger{background:#ffe5ec;color:#9d1739}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 5px 20px rgba(31,41,55,.04)}
+.section-title{margin:28px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}.section-title h2{margin:0;font-size:22px}
+.icon-card{min-height:150px;transition:.2s}.icon-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.bigico{font-size:32px}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}input,select,textarea{width:100%;padding:12px;border:1px solid #d8dce8;border-radius:11px;outline:none;background:#fff}input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.1)}
+.formgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+.notice{padding:14px;border-radius:14px;background:#eef2ff;border-left:4px solid var(--primary);color:#30375d}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--primary)}
+.concept{font-size:22px;font-weight:800;color:#2b2a72}
+.example{background:#f7f8fc;border:1px dashed #cfd4e4;border-radius:15px;padding:16px;margin-top:12px}
+code,.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.codebox{background:#101426;color:#dce5ff;border-radius:15px;padding:17px;overflow:auto;line-height:1.65}
+.step{display:flex;gap:12px;margin:13px 0}.num{min-width:30px;height:30px;border-radius:50%;background:#e8e7ff;color:#4a42d2;display:grid;place-items:center;font-weight:800}
+.choice{display:block;text-align:left;width:100%;padding:13px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:12px}.choice:hover{border-color:#8a84ff;background:#f8f7ff}.choice.correct{border-color:#12b886;background:#e9fbf4}.choice.wrong{border-color:#ef476f;background:#fff0f3}
+.feedback{padding:12px;border-radius:12px;margin-top:10px;font-size:14px}.ok{background:#e9fbf4;color:#08734f}.no{background:#fff0f3;color:#a61d3f}
+.quiz-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:10px}
+.tag{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#5149cc;margin:3px}
+.game-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:500px}.tile{aspect-ratio:1;border-radius:15px;background:#eef2ff;display:grid;place-items:center;font-size:27px;transition:.2s}.tile:hover{background:#dddafe}.tile.selected{outline:3px solid #635bff}.tile.done{background:#e9fbf4}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.flowbox{padding:12px 15px;border-radius:12px;background:#eef2ff;font-weight:700}.arrow{font-size:20px;color:#8a90a8}
+.dropzone{min-height:60px;border:2px dashed #b8bdd0;border-radius:13px;padding:10px;background:#fafbff}.dragitem{display:inline-block;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:10px;margin:5px;cursor:grab}.dropzone.over{border-color:var(--primary);background:#f1f0ff}
+.matchgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.matchgrid button{text-align:left;background:#fff;border:1px solid var(--line);padding:12px;border-radius:10px}
+.stat{font-size:30px;font-weight:900}.muted{color:var(--muted)}.center{text-align:center}
+.badge{width:100px;height:100px;border-radius:50%;margin:auto;display:grid;place-items:center;background:linear-gradient(135deg,#ffd166,#ff8c42);font-size:43px;box-shadow:0 10px 25px #ffd16655}
+.certificate{background:#fff;border:8px double #635bff;padding:34px;text-align:center;border-radius:10px;max-width:820px;margin:auto}
+.cert-name{font-size:34px;font-weight:900;color:#2b2a72}.cert-title{font-size:27px;font-weight:800}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+.small{font-size:12px}.toast{position:fixed;right:20px;bottom:20px;background:#11152b;color:#fff;padding:13px 16px;border-radius:12px;display:none;z-index:100}
+.footer{margin-top:30px;text-align:center;color:var(--muted);font-size:12px}.send-result{margin-top:12px}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:15px}.hamb{display:block}.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}
+@media(max-width:620px){.g2,.g3{grid-template-columns:1fr}.hero{padding:24px}.hero:after{display:none}.game-board{grid-template-columns:repeat(4,1fr)}.cert-name{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">⌘</div><div><b>AlgoQuest IX</b><small>Informatika • Algoritma</small></div></div>
+  <div class="nav" id="nav">
+    <button data-page="home" class="active"><span class="ico">🏠</span>Beranda</button>
+    <button data-page="tujuan"><span class="ico">🎯</span>Tujuan Pembelajaran</button>
+    <button data-page="materi"><span class="ico">📚</span>Materi Interaktif</button>
+    <button data-page="eksplorasi"><span class="ico">🔎</span>Aktivitas Eksplorasi</button>
+    <button data-page="praktik"><span class="ico">🧪</span>Praktik / Lab Algoritma</button>
+    <button data-page="game"><span class="ico">🎮</span>Mini Game</button>
+    <button data-page="lkpd"><span class="ico">📝</span>LKPD Interaktif</button>
+    <button data-page="kuis"><span class="ico">🧠</span>Kuis Adaptif</button>
+    <button data-page="progress"><span class="ico">📈</span>Progres Belajar</button>
+    <button data-page="refleksi"><span class="ico">💭</span>Refleksi</button>
+    <button data-page="sertifikat"><span class="ico">🏆</span>Badge & Sertifikat</button>
+  </div>
+  <div class="side-progress">
+    <small>Progres pembelajaran</small><div style="height:7px"></div><div class="progressbar"><span id="sideProg"></span></div>
+    <div style="height:8px"></div><b id="sideProgText">0%</b>
+  </div>
+  <button class="btn light" style="width:100%;margin-top:10px" onclick="resetApp()">↺ Mulai Ulang</button>
+</aside>
+
+<main class="main">
+<div class="topbar"><button class="btn light hamb" onclick="toggleSide()">☰</button><div></div><span class="pill">👤 <span id="userPill">Data murid belum diisi</span></span></div>
+
+<section class="page active" id="home">
+  <div class="hero">
+    <div class="kicker" style="color:#b9b5ff">INFORMATIKA KELAS IX</div>
+    <h1>Algoritma: dari Masalah Menjadi Langkah Solutif</h1>
+    <p>Belajar menyusun instruksi yang logis, terurut, jelas, dan dapat diuji melalui situasi sehari-hari, pseudocode, flowchart, permainan, dan studi kasus.</p>
+    <button class="btn light" onclick="go('tujuan')">Mulai Petualangan →</button>
+  </div>
+  <div class="section-title"><h2>👋 Sebelum mulai</h2></div>
+  <div class="card">
+    <div class="notice">Tuliskan identitas dengan benar. Data ini dipakai untuk progres, hasil belajar, dan nama pada sertifikat.</div>
+    <div style="height:14px"></div>
+    <div class="formgrid">
+      <div><label>Nama lengkap</label><input id="nama" placeholder="Contoh: Budi Santoso"></div>
+      <div><label>Kelas</label><input id="kelas" placeholder="IX-A"></div>
+      <div><label>Nomor absen</label><input id="absen" type="number" min="1" max="50" placeholder="01"></div>
+    </div>
+    <div style="height:14px"></div><button class="btn primary" onclick="saveProfile()">💾 Simpan & Lanjut</button>
+  </div>
+  <div class="section-title"><h2>🗺️ Peta perjalanan belajar</h2></div>
+  <div class="grid g4">
+    <div class="card icon-card"><div class="bigico">🎯</div><b>Pahami</b><p class="muted small">Tujuan dan konsep inti algoritma.</p></div>
+    <div class="card icon-card"><div class="bigico">🔎</div><b>Eksplorasi</b><p class="muted small">Temukan pola dan kesalahan instruksi.</p></div>
+    <div class="card icon-card"><div class="bigico">🧪</div><b>Praktik</b><p class="muted small">Susun dan uji algoritma.</p></div>
+    <div class="card icon-card"><div class="bigico">🏆</div><b>Buktikan</b><p class="muted small">Kuis, refleksi, badge, sertifikat.</p></div>
+  </div>
+</section>
+
+<section class="page" id="tujuan">
+<div class="section-title"><h2>🎯 Tujuan Pembelajaran</h2><span class="tag">Setelah belajar</span></div>
+<div class="card"><p>Setelah menyelesaikan pembelajaran, murid diharapkan mampu:</p>
+<div class="grid g2">
+<div class="step"><div class="num">1</div><div><b>Menjelaskan konsep algoritma</b><br><span class="muted">Mengidentifikasi algoritma sebagai urutan langkah logis untuk menyelesaikan masalah.</span></div></div>
+<div class="step"><div class="num">2</div><div><b>Menganalisis instruksi</b><br><span class="muted">Menemukan ketidakjelasan, urutan salah, atau langkah yang tidak diperlukan.</span></div></div>
+<div class="step"><div class="num">3</div><div><b>Merepresentasikan algoritma</b><br><span class="muted">Menggunakan narasi, pseudocode, dan flowchart sederhana.</span></div></div>
+<div class="step"><div class="num">4</div><div><b>Menguji dan memperbaiki</b><br><span class="muted">Melakukan dry run dan memperbaiki algoritma berdasarkan hasil uji.</span></div></div>
+</div></div>
+<div class="section-title"><h2>💡 Apersepsi</h2></div>
+<div class="card"><h3>“Kalau membuat mi instan, apakah urutan langkah boleh dibolak-balik?” 🍜</h3><p>Bayangkan temanmu hanya mengikuti instruksi tertulis. Jika kamu menulis <i>“masukkan bumbu”</i> sebelum menjelaskan kapan dan bagaimana menyiapkan mi, apakah hasilnya pasti sama?</p><button class="btn primary" onclick="go('materi')">Cari tahu konsepnya →</button></div>
+</section>
+
+<section class="page" id="materi">
+<div class="section-title"><h2>📚 Materi Interaktif</h2><span class="tag">Ringkas • Bermakna</span></div>
+<div class="grid g2">
+<div class="card"><div class="kicker">Konsep</div><div class="concept">Algoritma</div><p>Serangkaian langkah yang <b>logis, terurut, jelas, dan terbatas</b> untuk menyelesaikan suatu masalah atau mencapai tujuan.</p>
+<div class="example"><b>Contoh:</b> algoritma mengirim tugas digital → buka LMS → login → pilih kelas → unggah file → periksa file → kirim.</div></div>
+<div class="card"><div class="kicker">Ciri penting</div><h3>🧩 4 pertanyaan penguji</h3><ul><li>Apakah langkahnya jelas?</li><li>Apakah urutannya benar?</li><li>Apakah dapat dilaksanakan?</li><li>Apakah prosesnya berhenti?</li></ul></div>
+</div>
+<div class="section-title"><h2>🔁 Representasi Algoritma</h2></div>
+<div class="grid g3">
+<div class="card"><b>📝 Deskripsi</b><p class="muted">Ditulis dengan bahasa sehari-hari yang terstruktur.</p></div>
+<div class="card"><b>⌨️ Pseudocode</b><p class="muted">Instruksi semi-formal agar mudah diterjemahkan ke program.</p></div>
+<div class="card"><b>🔷 Flowchart</b><p class="muted">Diagram dengan simbol untuk menunjukkan alur proses.</p></div>
+</div>
+<div class="card" style="margin-top:16px"><h3>Contoh pseudocode: menentukan bilangan genap</h3><div class="codebox">MULAI<br>INPUT n<br>IF n MOD 2 = 0 THEN<br>&nbsp;&nbsp;TULIS "Genap"<br>ELSE<br>&nbsp;&nbsp;TULIS "Ganjil"<br>END IF<br>SELESAI</div></div>
+<div class="section-title"><h2>🧠 Cek pemahaman</h2></div>
+<div class="card" id="materiCheck"><b>Manakah yang paling tepat menggambarkan algoritma?</b>
+<button class="choice" onclick="instant(this,false,'Algoritma bukan sekadar kumpulan ide. Langkahnya harus dapat dijalankan.')">A. Kumpulan ide tanpa urutan</button>
+<button class="choice" onclick="instant(this,true,'Tepat! Algoritma berisi langkah logis dan terurut untuk mencapai tujuan.')">B. Langkah logis dan terurut untuk menyelesaikan masalah</button>
+<button class="choice" onclick="instant(this,false,'Gambar dapat menjadi representasi algoritma, tetapi algoritma bukan hanya gambar.')">C. Hanya flowchart</button>
+<div id="materiFb"></div></div>
+</section>
+
+<section class="page" id="eksplorasi">
+<div class="section-title"><h2>🔎 Aktivitas Eksplorasi</h2><span class="tag">Temukan bug!</span></div>
+<div class="card"><h3>Kasus: Mengirim tugas</h3><p>Perhatikan algoritma berikut. <b>Temukan langkah yang bermasalah.</b></p>
+<div class="flow">
+<div class="flowbox">Buka LMS</div><span class="arrow">→</span><div class="flowbox">Unggah file</div><span class="arrow">→</span><div class="flowbox">Login</div><span class="arrow">→</span><div class="flowbox">Klik Kirim</div>
+</div>
+<p class="muted">Klik langkah yang menurutmu perlu diperbaiki.</p>
+<div class="grid g2">
+<button class="choice" onclick="explore(this,true)">Unggah file</button>
+<button class="choice" onclick="explore(this,false)">Buka LMS</button>
+<button class="choice" onclick="explore(this,false)">Klik Kirim</button>
+<button class="choice" onclick="explore(this,false)">Tidak ada masalah</button>
+</div><div id="exploreFb"></div></div>
+<div class="card" style="margin-top:16px"><h3>🌐 Algoritma di kehidupan digital</h3><p>Pilih dua contoh yang menurutmu menggunakan algoritma, lalu jelaskan alasannya.</p>
+<label><input type="checkbox" class="casebox" value="Rekomendasi video"> Rekomendasi video</label>
+<label><input type="checkbox" class="casebox" value="GPS"> GPS mencari rute</label>
+<label><input type="checkbox" class="casebox" value="Jam dinding"> Jam dinding analog</label>
+<textarea id="caseReason" rows="3" placeholder="Tuliskan alasanmu..."></textarea><button class="btn green" onclick="submitExploration()">Kirim jawaban</button><div id="exploreResult"></div></div>
+</section>
+
+<section class="page" id="praktik">
+<div class="section-title"><h2>🧪 Praktik: Simulator Dry Run</h2><span class="tag">Laboratorium Algoritma</span></div>
+<div class="card"><p>Uji algoritma berikut dengan input angka. Simulator akan menjalankan langkahnya.</p>
+<div class="codebox">INPUT n<br>IF n &gt; 0 THEN → "Positif"<br>ELSE IF n &lt; 0 THEN → "Negatif"<br>ELSE → "Nol"</div>
+<div class="formgrid" style="grid-template-columns:1fr 1fr"><div><label>Masukkan n</label><input id="dryN" type="number" placeholder="-5"></div><div style="display:flex;align-items:end"><button class="btn primary" onclick="dryRun()">▶ Jalankan Dry Run</button></div></div>
+<div id="dryResult" style="margin-top:15px"></div></div>
+<div class="card" style="margin-top:16px"><h3>🛠️ Tantangan: algoritma menentukan nilai terbesar</h3><p>Susun ide langkahnya sebelum masuk ke program.</p>
+<div id="dragItems"><span class="dragitem" draggable="true" data-v="1">Input A dan B</span><span class="dragitem" draggable="true" data-v="2">Bandingkan A dan B</span><span class="dragitem" draggable="true" data-v="3">Tampilkan nilai terbesar</span><span class="dragitem" draggable="true" data-v="4">Mulai</span></div>
+<div class="dropzone" id="sortZone">Tarik kartu ke sini sesuai urutan →</div><button class="btn green" onclick="checkSort()" style="margin-top:10px">Periksa urutan</button><div id="sortFb"></div></div>
+</section>
+
+<section class="page" id="game">
+<div class="section-title"><h2>🎮 Mini Game — Debugger Kilat</h2><span class="tag">3 ronde</span></div>
+<div class="card"><div class="quiz-meta"><span id="gameRound">Ronde 1/3</span><span>⭐ <b id="gameScore">0</b></span></div>
+<h3 id="gameQ"></h3><div id="gameChoices"></div><div id="gameFb"></div></div>
+</section>
+
+<section class="page" id="lkpd">
+<div class="section-title"><h2>📝 LKPD Interaktif</h2><span class="tag">Problem Solving</span></div>
+<div class="card"><h3>Studi kasus: Mesin antrean kantin</h3><p>Sebuah kantin ingin membuat sistem sederhana: murid memasukkan nomor antrean, sistem mengecek apakah nomor tersebut sudah dipanggil. Buat rancangan algoritma singkat.</p>
+<label>1. Input yang dibutuhkan</label><input id="lk1" placeholder="Contoh: nomor antrean murid">
+<label style="margin-top:12px">2. Proses utama</label><textarea id="lk2" rows="2" placeholder="Apa yang harus dibandingkan/dicek?"></textarea>
+<label style="margin-top:12px">3. Output</label><input id="lk3" placeholder="Apa yang ditampilkan?">
+<label style="margin-top:12px">4. Pseudocode sederhana</label><textarea id="lk4" rows="5" class="code" placeholder="INPUT ..."></textarea>
+<button class="btn primary" onclick="saveLKPD()">💾 Simpan LKPD</button><div id="lkFb"></div></div>
+</section>
+
+<section class="page" id="kuis">
+<div class="section-title"><h2>🧠 Kuis Adaptif</h2><span class="tag" id="levelTag">Mudah</span></div>
+<div class="card" id="quizCard">
+<div class="quiz-meta"><span id="quizCount">Soal 1/8</span><span>Skor: <b id="quizScore">0</b></span></div>
+<h3 id="quizQ"></h3><div id="quizChoices"></div><div id="quizFb"></div>
+<button class="btn primary" id="nextQuiz" style="display:none;margin-top:12px" onclick="nextQuizQ()">Lanjut →</button>
+</div>
+</section>
+
+<section class="page" id="progress">
+<div class="section-title"><h2>📈 Progres Belajar</h2></div>
+<div class="grid g4">
+<div class="card center"><div class="stat" id="pct">0%</div><div class="muted">Progres</div></div>
+<div class="card center"><div class="stat" id="pScore">0</div><div class="muted">Skor kuis</div></div>
+<div class="card center"><div class="stat" id="pGame">0</div><div class="muted">Game</div></div>
+<div class="card center"><div class="stat" id="pBadge">—</div><div class="muted">Badge</div></div>
+</div>
+<div class="card" style="margin-top:16px"><h3>📤 Kirim hasil kepada guru</h3><p class="muted">Aplikasi ini berjalan tanpa server. Untuk menjaga data murid, hasil dapat diekspor sebagai JSON/CSV atau dibuka melalui email/WhatsApp untuk dikirim secara manual kepada guru.</p>
+<div class="grid g2">
+<button class="btn green" onclick="sendToGoogleSheet()">☁️ Kirim Hasil ke Guru</button>
+<button class="btn primary" onclick="sendEmail()">✉️ Siapkan Email</button>
+<button class="btn light" onclick="downloadJSON()">⬇️ Download JSON</button>
+<button class="btn light" onclick="downloadCSV()">⬇️ Download CSV</button>
+</div>
+<div id="sendResult"></div>
+<p class="small muted" style="margin-top:12px">Alamat email guru belum ditetapkan di aplikasi. Guru dapat mengubah alamat pada bagian Pengaturan Kontak Guru di bawah.</p>
+<label style="margin-top:14px">Email guru (opsional)</label><input id="teacherEmail" type="email" placeholder="guru@sekolah.sch.id">
+</div>
+</section>
+
+<section class="page" id="refleksi">
+<div class="section-title"><h2>💭 Refleksi</h2><span class="tag">Metakognisi</span></div>
+<div class="card"><p><b>Setelah belajar algoritma, bagian mana yang paling membantu pemahamanmu?</b></p>
+<div id="reflectChoices">
+<button class="choice" onclick="reflect(this,'Memahami konsep')">📚 Memahami konsep</button>
+<button class="choice" onclick="reflect(this,'Praktik dry run')">🧪 Praktik dry run</button>
+<button class="choice" onclick="reflect(this,'Mini game')">🎮 Mini game</button>
+<button class="choice" onclick="reflect(this,'Kuis')">🧠 Kuis</button>
+</div>
+<label style="margin-top:14px">Satu hal yang sekarang bisa saya lakukan:</label><textarea id="reflection" rows="4" placeholder="Tuliskan dengan kalimatmu sendiri..."></textarea>
+<button class="btn green" onclick="saveReflection()">Simpan refleksi</button><div id="refFb"></div></div>
+</section>
+
+<section class="page" id="sertifikat">
+<div class="section-title"><h2>🏆 Badge & Sertifikat</h2></div>
+<div class="grid g2">
+<div class="card center"><div class="badge" id="badgeIcon">🚀</div><h3 id="badgeName">Algorithm Explorer</h3><p class="muted" id="badgeDesc">Selesaikan pembelajaran untuk membuka badge.</p></div>
+<div class="card"><h3>🎓 Sertifikat digital</h3><p>Nama pada sertifikat mengikuti data murid yang kamu masukkan.</p><button class="btn primary" onclick="downloadCertificate()">⬇️ Unduh Sertifikat</button><button class="btn light" onclick="printCertificate()" style="margin-left:6px">🖨️ Cetak / PDF</button></div>
+</div>
+<div style="height:16px"></div>
+<div class="certificate" id="certificate">
+<div style="font-size:18px">🏫 PEMBELAJARAN INFORMATIKA</div><div class="cert-title">SERTIFIKAT PENYELESAIAN</div><p>Diberikan kepada</p><div class="cert-name" id="certName">Nama Murid</div><p id="certClass">Kelas — • Absen —</p><hr><p>Telah menyelesaikan pembelajaran interaktif</p><h2>“ALGORITMA”</h2><p>meliputi konsep, representasi, pengujian, pemecahan masalah, dan evaluasi.</p><p><b>Guru:</b> Armaja Pacco Anugroho</p><p class="small">Skor kuis: <span id="certScore">0</span> • Progres: <span id="certProg">0%</span></p>
+</div>
+</section>
+
+<div class="footer">AlgoQuest IX • Informatika • Materi Algoritma • Guru: Armaja Pacco Anugroho</div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='algoquest_ix_v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ profile:{nama:'',kelas:'',absen:''},visited:['home'],quiz:{i:0,score:0,answered:false},game:{i:0,score:0,answered:false},
+ exploration:false,practice:false,lkpd:false,reflection:false,reflectChoice:'', teacherEmail:''
+};
+const quizBank=[
+ {level:'Mudah',q:'Apa tujuan utama sebuah algoritma?',a:['Menghasilkan warna tampilan','Menyelesaikan masalah melalui langkah logis','Membuat komputer lebih mahal','Menghapus semua data'],c:1,e:'Algoritma membantu mencapai tujuan melalui langkah yang dapat dijalankan.'},
+ {level:'Mudah',q:'Langkah algoritma yang baik seharusnya...',a:['Acak','Tidak terbatas','Jelas dan berurutan','Selalu berupa gambar'],c:2,e:'Urutan dan kejelasan membuat instruksi dapat dilaksanakan.'},
+ {level:'Sedang',q:'Dalam flowchart, simbol belah ketupat umumnya digunakan untuk...',a:['Proses','Input/output','Keputusan/percabangan','Mulai/selesai'],c:2,e:'Belah ketupat menandai kondisi/keputusan.'},
+ {level:'Sedang',q:'Jika algoritma “login → buka situs → masukkan sandi”, masalah utamanya adalah...',a:['Situs dibuka setelah login tanpa konteks','Tidak ada output','Terlalu banyak langkah','Tidak ada simbol'],c:0,e:'Secara umum, akses situs/login harus memiliki urutan yang masuk akal sesuai sistem.'},
+ {level:'Sedang',q:'Apa fungsi dry run?',a:['Menghias flowchart','Menguji alur algoritma dengan contoh data','Menghapus program','Mengganti keyboard'],c:1,e:'Dry run menelusuri algoritma langkah demi langkah dengan data contoh.'},
+ {level:'Sulit',q:'Algoritma mencari nilai terbesar dari A dan B paling tepat dimulai dengan...',a:['Langsung mencetak A','Membandingkan A dan B','Menghapus B','Mengulang tanpa kondisi'],c:1,e:'Perbandingan diperlukan untuk menentukan nilai mana yang terbesar.'},
+ {level:'Sulit',q:'Jika sebuah algoritma menghasilkan hasil salah karena langkah berada pada urutan yang keliru, tindakan paling tepat adalah...',a:['Mengganti nama variabel saja','Melakukan debugging dan menelusuri alur','Menghapus semua langkah','Mengabaikan hasil'],c:1,e:'Debugging membantu menemukan dan memperbaiki kesalahan logika/alur.'},
+ {level:'Sulit',q:'Manakah yang paling menunjukkan berpikir komputasional dalam merancang algoritma?',a:['Menebak hasil','Memecah masalah dan menyusun langkah teruji','Menyalin tanpa memahami','Menghafal semua kode'],c:1,e:'Dekomposisi dan perancangan langkah teruji merupakan bagian penting berpikir komputasional.'}
+];
+const gameBank=[
+ {q:'Urutan mana yang logis untuk mencetak dokumen?',a:['Cetak→pilih file→buka dokumen','Buka dokumen→pilih cetak→atur opsi→cetak','Matikan komputer→cetak→buka dokumen'],c:1},
+ {q:'Bug pada “INPUT nilai → tampilkan nilai terbesar” untuk satu angka adalah...',a:['Tidak ada proses pembanding yang diperlukan','Terlalu banyak output','Input harus dihapus'],c:0},
+ {q:'Untuk keputusan “nilai ≥ 75?”, struktur yang dibutuhkan adalah...',a:['Percabangan/kondisi','Hanya output','Hanya komentar'],c:0}
+];
+
+function persist(){localStorage.setItem(KEY,JSON.stringify(S));updateUI()}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));if(!S.visited.includes(page))S.visited.push(page);persist();window.scrollTo({top:0,behavior:'smooth'});if(page==='kuis')renderQuiz();if(page==='game')renderGame();if(page==='sertifikat')renderCert();if(innerWidth<901)document.getElementById('sidebar').classList.remove('open')}
+function toggleSide(){document.getElementById('sidebar').classList.toggle('open')}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function saveProfile(){const nama=document.getElementById('nama').value.trim(),kelas=document.getElementById('kelas').value.trim(),absen=document.getElementById('absen').value.trim();if(!nama||!kelas||!absen){toast('Lengkapi nama, kelas, dan nomor absen.');return}S.profile={nama,kelas,absen};persist();toast('Data tersimpan. Selamat belajar!');go('tujuan')}
+function updateUI(){
+ const p=S.profile;document.getElementById('userPill').textContent=p.nama?p.nama+' • '+p.kelas+' • '+p.absen:'Data murid belum diisi';
+ const prog=Math.min(100,Math.round((S.visited.length/11)*100));document.getElementById('sideProg').style.width=prog+'%';document.getElementById('sideProgText').textContent=prog+'%';
+ document.getElementById('pct').textContent=prog+'%';document.getElementById('pScore').textContent=S.quiz.score;document.getElementById('pGame').textContent=S.game.score;
+ const badge=S.quiz.score>=80?'Algorithm Master':S.quiz.score>=60?'Logic Builder':'Algorithm Explorer';document.getElementById('pBadge').textContent=badge.split(' ')[0];
+ document.getElementById('teacherEmail').value=S.teacherEmail||'';
+}
+function instant(el,ok,msg){document.querySelectorAll('#materiCheck .choice').forEach(x=>x.disabled=true);el.classList.add(ok?'correct':'wrong');document.getElementById('materiFb').innerHTML='<div class="feedback '+(ok?'ok':'no')+'">'+(ok?'✅ ':'❌ ')+msg+'</div>';if(ok&&!S.visited.includes('materiCheck'))S.visited.push('materiCheck');persist()}
+function explore(el,ok){document.querySelectorAll('#eksplorasi .grid .choice').forEach(x=>x.disabled=true);el.classList.add(ok?'correct':'wrong');document.getElementById('exploreFb').innerHTML='<div class="feedback '+(ok?'ok':'no')+'">'+(ok?'✅ Tepat. Login harus dilakukan sebelum mengunggah file.':'❌ Perhatikan kembali urutan proses login dan unggah.')+'</div>';if(ok)S.exploration=true;persist()}
+function submitExploration(){const chosen=[...document.querySelectorAll('.casebox:checked')].map(x=>x.value);const reason=document.getElementById('caseReason').value.trim();if(chosen.length<1||!reason){toast('Pilih minimal satu contoh dan tuliskan alasan.');return}S.exploration=true;persist();document.getElementById('exploreResult').innerHTML='<div class="feedback ok">✅ Jawaban tersimpan. Contoh yang dipilih: '+chosen.join(', ')+'.</div>'}
+function dryRun(){const n=Number(document.getElementById('dryN').value);if(Number.isNaN(n)){toast('Masukkan angka.');return}let r=n>0?'Positif':n<0?'Negatif':'Nol';S.practice=true;persist();document.getElementById('dryResult').innerHTML='<div class="feedback ok"><b>Trace:</b> INPUT '+n+' → cek n > 0 → cek n < 0 → output <b>'+r+'</b>. Algoritma berhenti setelah output.</div>'}
+let dragged=null;document.querySelectorAll('.dragitem').forEach(x=>{x.addEventListener('dragstart',()=>dragged=x);});const dz=document.getElementById('sortZone');dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});dz.addEventListener('dragleave',()=>dz.classList.remove('over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(dragged)dz.appendChild(dragged)});
+function checkSort(){const vals=[...dz.querySelectorAll('.dragitem')].map(x=>x.dataset.v);const ok=vals.join(',')==='4,1,2,3';document.getElementById('sortFb').innerHTML='<div class="feedback '+(ok?'ok':'no')+'">'+(ok?'🎉 Urutan benar! Kamu menerapkan alur input → proses → output.':'Belum tepat. Coba pikirkan: mulai → input → proses perbandingan → output.')+'</div>';if(ok){S.practice=true;persist()}}
+function renderGame(){const q=gameBank[S.game.i]||gameBank[0];document.getElementById('gameRound').textContent='Ronde '+(S.game.i+1)+'/3';document.getElementById('gameScore').textContent=S.game.score;document.getElementById('gameQ').textContent=q.q;document.getElementById('gameChoices').innerHTML=q.a.map((x,i)=>`<button class="choice" onclick="answerGame(${i})">${String.fromCharCode(65+i)}. ${x}</button>`).join('');document.getElementById('gameFb').innerHTML=''}
+function answerGame(i){if(S.game.answered)return;S.game.answered=true;const q=gameBank[S.game.i];const ok=i===q.c;if(ok)S.game.score+=Math.round(100/3);document.querySelectorAll('#gameChoices .choice').forEach((x,j)=>{x.disabled=true;if(j===q.c)x.classList.add('correct');if(j===i&&!ok)x.classList.add('wrong')});document.getElementById('gameFb').innerHTML='<div class="feedback '+(ok?'ok':'no')+'">'+(ok?'⚡ Debug tepat!':'💡 Belum tepat. Coba telusuri urutan langkah.')+'</div>';persist();setTimeout(()=>{if(S.game.i<2){S.game.i++;S.game.answered=false;renderGame()}else{toast('Mini game selesai!');S.visited.push('game');persist()}},900)}
+function saveLKPD(){const vals=['lk1','lk2','lk3','lk4'].map(id=>document.getElementById(id).value.trim());if(vals.some(x=>!x)){toast('Lengkapi semua bagian LKPD.');return}S.lkpd=true;persist();document.getElementById('lkFb').innerHTML='<div class="feedback ok">✅ LKPD tersimpan pada perangkat ini dan akan masuk ke rekap hasil.</div>'}
+function renderQuiz(){const q=quizBank[S.quiz.i];if(!q){finishQuiz();return}document.getElementById('levelTag').textContent=q.level;document.getElementById('quizCount').textContent='Soal '+(S.quiz.i+1)+'/8';document.getElementById('quizScore').textContent=S.quiz.score;document.getElementById('quizQ').textContent=q.q;document.getElementById('quizChoices').innerHTML=q.a.map((x,i)=>`<button class="choice" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${x}</button>`).join('');document.getElementById('quizFb').innerHTML='';document.getElementById('nextQuiz').style.display='none';S.quiz.answered=false}
+function answerQuiz(i){if(S.quiz.answered)return;S.quiz.answered=true;const q=quizBank[S.quiz.i],ok=i===q.c;if(ok)S.quiz.score+=12.5;document.querySelectorAll('#quizChoices .choice').forEach((x,j)=>{x.disabled=true;if(j===q.c)x.classList.add('correct');if(j===i&&!ok)x.classList.add('wrong')});document.getElementById('quizFb').innerHTML='<div class="feedback '+(ok?'ok':'no')+'">'+(ok?'✅ Benar! ':'❌ Belum tepat. ')+q.e+'</div>';document.getElementById('nextQuiz').style.display='inline-flex';persist()}
+function nextQuizQ(){S.quiz.i++;S.quiz.answered=false;if(S.quiz.i>=quizBank.length){finishQuiz();return}renderQuiz();persist()}
+function finishQuiz(){S.quiz.score=Math.round(S.quiz.score);S.visited.push('kuis');persist();document.getElementById('quizCard').innerHTML='<div class="center"><div class="badge">🏆</div><h2>Kuis selesai!</h2><p>Skor kamu <b>'+S.quiz.score+'</b>/100.</p><p class="muted">'+(S.quiz.score>=80?'Luar biasa! Kamu siap menerapkan algoritma.':S.quiz.score>=60?'Bagus! Tinjau kembali bagian yang masih keliru.':'Tetap semangat. Ulangi materi dan coba lagi.')+'</p><button class="btn primary" onclick="restartQuiz()">🔄 Ulangi Kuis</button></div>'}
+function restartQuiz(){S.quiz={i:0,score:0,answered:false};persist();renderQuiz()}
+function reflect(el,val){document.querySelectorAll('#reflectChoices .choice').forEach(x=>x.classList.remove('correct'));el.classList.add('correct');S.reflectChoice=val;persist()}
+function saveReflection(){const v=document.getElementById('reflection').value.trim();if(!S.reflectChoice||!v){toast('Pilih jawaban dan tuliskan refleksi.');return}S.reflection=true;persist();document.getElementById('refFb').innerHTML='<div class="feedback ok">💚 Refleksi tersimpan. Terima kasih sudah memikirkan proses belajarmu.</div>'}
+function renderCert(){const p=S.profile;document.getElementById('certName').textContent=p.nama||'Nama Murid';document.getElementById('certClass').textContent='Kelas '+(p.kelas||'—')+' • Absen '+(p.absen||'—');document.getElementById('certScore').textContent=S.quiz.score;document.getElementById('certProg').textContent=Math.min(100,Math.round((S.visited.length/11)*100))+'%';const b=S.quiz.score>=80?['🏆','Algorithm Master','Menunjukkan penguasaan konsep dan penerapan algoritma.']:S.quiz.score>=60?['🧠','Logic Builder','Mampu menjelaskan dan menguji algoritma.']:['🚀','Algorithm Explorer','Berani mengeksplorasi konsep algoritma.'];document.getElementById('badgeIcon').textContent=b[0];document.getElementById('badgeName').textContent=b[1];document.getElementById('badgeDesc').textContent=b[2]}
+function certHTML(){const p=S.profile,score=S.quiz.score,prog=Math.min(100,Math.round((S.visited.length/11)*100));return `<!doctype html><html><head><meta charset="utf-8"><title>Sertifikat ${p.nama}</title><style>body{font-family:Arial;background:#f4f5fb;padding:40px}.c{max-width:800px;margin:auto;background:white;border:8px double #635bff;padding:55px;text-align:center}.name{font-size:38px;font-weight:bold;color:#2b2a72}h1{color:#2b2a72}small{color:#667085}</style></head><body><div class="c"><div>🏫 PEMBELAJARAN INFORMATIKA</div><h1>SERTIFIKAT PENYELESAIAN</h1><p>Diberikan kepada</p><div class="name">${escapeHTML(p.nama||'Nama Murid')}</div><p>Kelas ${escapeHTML(p.kelas||'—')} • Absen ${escapeHTML(p.absen||'—')}</p><hr><p>Telah menyelesaikan pembelajaran interaktif</p><h2>“ALGORITMA”</h2><p>Konsep • Representasi • Pengujian • Pemecahan Masalah • Evaluasi</p><p><b>Guru:</b> Armaja Pacco Anugroho</p><p>Skor kuis: ${score}/100 • Progres: ${prog}%</p><small>AlgoQuest IX</small></div></body></html>`}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function downloadCertificate(){const blob=new Blob([certHTML()],{type:'text/html'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Sertifikat_Algoritma_'+(S.profile.nama||'Murid').replace(/\s+/g,'_')+'.html';a.click();URL.revokeObjectURL(a.href);toast('Sertifikat berhasil diunduh.')}
+function printCertificate(){renderCert();const w=window.open('','_blank');w.document.write(certHTML());w.document.close();w.focus();setTimeout(()=>w.print(),400)}
+function resultData(){return {identitas:S.profile,hasil:{skorKuis:S.quiz.score,skorGame:S.game.score,progres:Math.min(100,Math.round((S.visited.length/11)*100)),eksplorasi:S.exploration,praktik:S.practice,lkpd:S.lkpd,refleksi:S.reflection,pilihanRefleksi:S.reflectChoice},waktu:new Date().toLocaleString('id-ID')}}
+function downloadJSON(){const blob=new Blob([JSON.stringify(resultData(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Hasil_Algoritma_'+(S.profile.nama||'Murid').replace(/\s+/g,'_')+'.json';a.click()}
+function downloadCSV(){const d=resultData(),row=['Nama','Kelas','Absen','Skor Kuis','Skor Game','Progres','Eksplorasi','Praktik','LKPD','Refleksi','Waktu'];const val=[d.identitas.nama,d.identitas.kelas,d.identitas.absen,d.hasil.skorKuis,d.hasil.skorGame,d.hasil.progres,d.hasil.eksplorasi,d.hasil.praktik,d.hasil.lkpd,d.hasil.refleksi,d.waktu];const csv=[row,val].map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\\n');const blob=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Rekap_Algoritma_'+(S.profile.nama||'Murid').replace(/\s+/g,'_')+'.csv';a.click()}
+const GOOGLE_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxvbygcfKFHMdB4PSgUz0MUEJmddHjTfoC1nNKCq_fgfOd8_tUpns54BXN3agSDcAnF/exec";
+async function sendToGoogleSheet(){
+  if(!S.profile.nama || !S.profile.kelas || !S.profile.absen){
+    toast('Lengkapi nama, kelas, dan nomor absen terlebih dahulu.');
+    go('home');
+    return;
+  }
+
+  const data = {
+    nama: S.profile.nama,
+    kelas: S.profile.kelas,
+    absen: S.profile.absen,
+    skorKuis: S.quiz.score,
+    skorGame: S.game.score,
+    progres: Math.min(100, Math.round((S.visited.length / 11) * 100)),
+    eksplorasi: S.exploration,
+    praktik: S.practice,
+    lkpd: S.lkpd,
+    refleksi: S.reflection,
+    pilihanRefleksi: S.reflectChoice,
+    waktu: new Date().toLocaleString('id-ID')
+  };
+
+  const result = document.getElementById('sendResult');
+  result.innerHTML = '<div class="feedback" style="background:#eef2ff;color:#30375d">⏳ Mengirim hasil belajar ke Google Sheets...</div>';
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(data)
+    });
+
+    result.innerHTML = '<div class="feedback ok">✅ Hasil berhasil dikirim. Guru dapat merekapnya melalui Google Sheets.</div>';
+    toast('✅ Hasil berhasil dikirim ke guru.');
+  } catch(error) {
+    console.error(error);
+    result.innerHTML = '<div class="feedback no">❌ Pengiriman gagal. Pastikan internet aktif dan URL Google Apps Script sudah benar.</div>';
+    toast('❌ Pengiriman gagal.');
+  }
+}
+
+function sendEmail(){const email=document.getElementById('teacherEmail').value.trim();S.teacherEmail=email;persist();const subject=encodeURIComponent('Hasil Pembelajaran Algoritma - '+(S.profile.nama||'Murid'));const body=encodeURIComponent('Nama: '+S.profile.nama+'\\nKelas: '+S.profile.kelas+'\\nAbsen: '+S.profile.absen+'\\nSkor Kuis: '+S.quiz.score+'/100\\nSkor Game: '+S.game.score+'\\nProgres: '+Math.min(100,Math.round((S.visited.length/11)*100))+'%\\n\\nHasil lengkap dapat dilampirkan dari file JSON/CSV yang diunduh dari aplikasi.');location.href='mailto:'+(email||'')+'?subject='+subject+'&body='+body}
+function resetApp(){if(confirm('Hapus seluruh progres dan data murid pada perangkat ini?')){localStorage.removeItem(KEY);location.reload()}}
+document.getElementById('teacherEmail').addEventListener('change',e=>{S.teacherEmail=e.target.value;persist()});
+['nama','kelas','absen'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(id==='nama')S.profile.nama=document.getElementById(id).value;if(id==='kelas')S.profile.kelas=document.getElementById(id).value;if(id==='absen')S.profile.absen=document.getElementById(id).value;localStorage.setItem(KEY,JSON.stringify(S))}));
+updateUI();renderCert();
+</script>
+</body>
+</html>
